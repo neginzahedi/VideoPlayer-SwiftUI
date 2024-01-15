@@ -6,11 +6,23 @@
 //
 
 import SwiftUI
+import AVKit
 
 struct VideoView: View {
+    @ObservedObject private var manager = VideoManager.shared
+    
     var body: some View {
         Text("Hello, world!")
             .padding()
+            .onAppear(){
+                Task {
+                    do {
+                        try await manager.fetchVideos()
+                    } catch{
+                        print("error fetch")
+                    }
+                }
+            }
     }
 }
 
