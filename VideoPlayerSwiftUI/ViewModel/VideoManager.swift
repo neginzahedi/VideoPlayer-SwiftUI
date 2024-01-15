@@ -7,6 +7,11 @@
 
 import Foundation
 
+enum FetchError: Error {
+    case invalidURL
+    case failedToFetch(Error)
+}
+
 class VideoManager: ObservableObject {
     
     @Published var videos = [Video]()
@@ -19,23 +24,20 @@ class VideoManager: ObservableObject {
     func fetchVideos() async throws{
         
         guard let url = URL(string: apiUrl) else {
-            print("invalid url")
-            return
+            throw FetchError.invalidURL
         }
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
-            print("data recieved")
             
             let videos = try JSONDecoder().decode([Video].self, from: data)
             
             DispatchQueue.main.async {
                 self.videos = videos.sorted(by: { $0.publishedAt > $1.publishedAt })
-                print("Videos updated and sorted")
-                print(videos)
             }
+            
         } catch{
-            print("Failed to fetch videos with error: \(error)")
+            throw FetchError.failedToFetch(error)
         }
     }
 }
