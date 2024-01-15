@@ -17,19 +17,24 @@ struct VideoView: View {
     
     var body: some View {
         VStack{
+            // View Title
             Text("Video Player")
                 .bold()
-                .padding()
+                .padding(.top, 80)
             
             if !manager.videos.isEmpty {
+                // Video
                 VideoPlayer(player: player)
                     .disabled(true) // hide dafault controls
                     .frame(height: 250)
                     .overlay(playerControls(), alignment: .center)
+                // Details
+                videoDetails()
+                    .padding()
             }
             
-            Spacer()
         }
+        .ignoresSafeArea()
         .onAppear(){
             Task {
                 do {
@@ -87,6 +92,24 @@ struct VideoView: View {
                     .opacity(index + 1 == manager.videos.count ? 0.2 : 1.0)
             }
             .disabled(index + 1 == manager.videos.count)
+        }
+    }
+    
+    func videoDetails() -> some View{
+        ScrollView {
+            VStack(alignment: .leading){
+                HStack{
+                    Text(manager.videos[index].title)
+                    Spacer()
+                }
+                HStack{
+                    Text(manager.videos[index].author.name)
+                    Spacer()
+                }
+            }
+            .padding()
+            
+            Text(manager.videos[index].description)
         }
     }
 }
