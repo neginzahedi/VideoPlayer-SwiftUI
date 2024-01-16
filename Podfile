@@ -6,7 +6,7 @@ target 'VideoPlayerSwiftUI' do
   use_frameworks!
 
   # Pods for VideoPlayerSwiftUI
-  pod "MarkdownKit"
+  pod 'Down'
 
   target 'VideoPlayerSwiftUITests' do
     inherit! :search_paths

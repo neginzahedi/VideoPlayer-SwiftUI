@@ -12,7 +12,7 @@ struct Video: Codable {
     let title: String
     let hlsURL: URL
     let fullURL: URL
-    let description: String
+    var description: String
     let publishedAt: String
     let author: Author
 }

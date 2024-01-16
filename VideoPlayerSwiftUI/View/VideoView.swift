@@ -7,6 +7,8 @@
 
 import SwiftUI
 import AVKit
+import Down
+//import UIKit
 
 struct VideoView: View {
     @ObservedObject private var manager = VideoManager.shared
@@ -14,6 +16,8 @@ struct VideoView: View {
     @State private var player = AVPlayer()
     @State private var index = 0
     @State private var isPlaying = false
+    @State private var videoDescription: String = ""
+    
     
     var body: some View {
         VStack{
@@ -31,7 +35,13 @@ struct VideoView: View {
                 // Details
                 videoDetails()
                     .padding()
+            } else {
+                
+                Text("There is no video to play...")
+                    .padding()
             }
+            
+            Spacer()
             
         }
         .ignoresSafeArea()
@@ -96,21 +106,52 @@ struct VideoView: View {
     }
     
     func videoDetails() -> some View{
-        ScrollView {
+        ScrollView(showsIndicators: false) {
             VStack(alignment: .leading){
                 HStack{
                     Text(manager.videos[index].title)
+                        .font(.title2)
+                        .bold()
                     Spacer()
                 }
                 HStack{
                     Text(manager.videos[index].author.name)
+                        .font(.title3)
+                        .bold()
                     Spacer()
                 }
             }
-            .padding()
             
-            Text(manager.videos[index].description)
+            DownTextView(markdownString: $manager.videos[index].description)
+                .frame(maxWidth: .infinity)
         }
+    }
+}
+
+struct DownTextView: UIViewRepresentable {
+    @Binding var markdownString: String
+    
+    func makeUIView(context: Context) -> UITextView {
+        let textView = UITextView()
+        textView.isEditable = false
+        textView.isScrollEnabled = false
+        textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        textView.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
+        textView.textContainerInset = .zero
+        textView.textContainer.lineFragmentPadding = 0
+        //updateTextView(textView)
+        return textView
+    }
+    
+    func updateUIView(_ uiView: UITextView, context: Context) {
+        updateTextView(uiView)
+    }
+    
+    private func updateTextView(_ textView: UITextView) {
+        guard let attributedString = try? Down(markdownString: markdownString).toAttributedString() else {
+            return
+        }
+        textView.attributedText = attributedString
     }
 }
 
