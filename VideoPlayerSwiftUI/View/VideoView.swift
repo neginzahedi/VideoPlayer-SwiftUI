@@ -89,7 +89,11 @@ struct VideoView: View {
                 isPlaying.toggle()
             }) {
                 Image(isPlaying ? "pause" : "play")
+                    .accessibility(identifier: isPlaying ? "pauseImage" : "playImage")
+
             }
+            .accessibility(identifier: "playPauseButton")
+
             
             // Next Button
             Button(action: {
@@ -100,6 +104,8 @@ struct VideoView: View {
             }) {
                 Image("next")
                     .opacity(index + 1 == manager.videos.count ? 0.2 : 1.0)
+                    .accessibility(identifier: "nextImage")
+
             }
             .disabled(index + 1 == manager.videos.count)
         }
