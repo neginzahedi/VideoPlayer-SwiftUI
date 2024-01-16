@@ -1,0 +1,16 @@
+PODS:
+  - MarkdownKit (1.7.1)
+
+DEPENDENCIES:
+  - MarkdownKit
+
+SPEC REPOS:
+  trunk:
+    - MarkdownKit
+
+SPEC CHECKSUMS:
+  MarkdownKit: 0b15195c63cf3e39387949c4bdeccde0055e252a
+
+PODFILE CHECKSUM: 5fb24590bb414de80ce256cc42d0b4e60ed60f9e
+
+COCOAPODS: 1.14.3
